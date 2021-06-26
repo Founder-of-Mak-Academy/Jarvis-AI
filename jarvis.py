@@ -15,6 +15,8 @@ import wolframalpha
 import time
 from urllib.request import urlopen
 import requests
+import pywhatkit as kit
+from contacts import contact
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -115,7 +117,6 @@ if __name__ == '__main__':
 	# This Function will clean any 
 	# command before execution of this python file
     clear()
-
     wishme()
     
     while True:
@@ -399,3 +400,25 @@ if __name__ == '__main__':
         elif 'offline' in query:
             speak("going Offline")
             quit()
+
+        # Whatsapp Function
+        elif 'send a whatsapp message' in query:
+            speak('Whom do you want to contact?')
+            user = TakeCommand().lower()  
+            speak("What do you want to say?")
+            message = TakeCommand().lower()
+            speak("When to send?")
+            s_time = TakeCommand().lower()
+            if 'later' in s_time:
+                speak("Tell me about the hour?")
+                hour__ = int(TakeCommand().lower())
+                speak("Tell me about the minutes?")
+                minute__ = int(TakeCommand().lower())
+            elif 'now' in s_time:
+                hour__ = datetime.datetime.now().hour
+                if (datetime.datetime.now().second) < 30:
+                    minute__ = (datetime.datetime.now().minute) + 1
+                else:
+                    minute__ = (datetime.datetime.now().minute) + 2
+            speak("Sending Message.")
+            kit.sendwhatmsg(contact[user]["phone"],message,hour__,minute__)   
